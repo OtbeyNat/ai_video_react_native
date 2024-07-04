@@ -6,19 +6,21 @@ import { images } from "../../constants";
 import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import EmptyState from "../../components/EmptyState";
+import useAppwrite from "../../lib/useAppwrite";
+import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
+import VideoCard from "../../components/VideoCard";
 
 const Home = () => {
-  // const { data: posts, refetch } = useAppwrite(getAllPosts);
-  // const { data: latestPosts } = useAppwrite(getLatestPosts);
+  const { data: posts, refetch } = useAppwrite(getAllPosts);
+  const { data: latestPosts } = useAppwrite(getLatestPosts);
 
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // await refetch();
+    await refetch();
     setRefreshing(false);
   };
-
   // one flatlist
   // with list header
   // and horizontal flatlist
@@ -29,10 +31,16 @@ const Home = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList
-        data={[{id: 1}, {id: 2}, {id: 3}]}
+        data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({item}) => (
-          <Text className="text-3xl">{item.id}</Text>
+        renderItem={({ item }) => (
+          <VideoCard
+            title={item.title}
+            thumbnail={item.thumbnail}
+            video={item.video}
+            creator={item.users.username}
+            avatar={item.users.avatar}
+          />
         )}
         ListHeaderComponent={() => (
           <View className="flex my-6 px-4 space-y-6">
@@ -60,7 +68,7 @@ const Home = () => {
                 Latest Videos
               </Text>
 
-              <Trending posts={[{id: 1}, {id: 2}, {id: 3}]} />
+              <Trending posts={latestPosts ?? []} />
             </View>
           </View>
         )}
