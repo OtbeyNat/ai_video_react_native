@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { ResizeMode, Video } from "expo-av";
-
 import { View, Text, TouchableOpacity, Image } from "react-native";
+
 import { icons } from "../constants";
 
 const VideoCard = ({ title, creator, avatar, thumbnail, video }) => {
   const [play, setPlay] = useState(false);
-  // console.log({title, creator, avatar, thumbnail, video});
+
   return (
     <View className="flex flex-col items-center px-4 mb-14">
-      <View className="flex-row gap-3 items-start">
-        <View className="justify-center items-center flex-row flex-1">
+      <View className="flex flex-row gap-3 items-start">
+        <View className="flex justify-center items-center flex-row flex-1">
           <View className="w-[46px] h-[46px] rounded-lg border border-secondary flex justify-center items-center p-0.5">
             <Image
               source={{ uri: avatar }}
@@ -46,7 +46,7 @@ const VideoCard = ({ title, creator, avatar, thumbnail, video }) => {
           className="w-full h-60 rounded-xl mt-3"
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls
-          shouldPlay
+          shouldPlay={true}
           onPlaybackStatusUpdate={(status) => {
             if (status.didJustFinish) {
               setPlay(false);
@@ -72,9 +72,8 @@ const VideoCard = ({ title, creator, avatar, thumbnail, video }) => {
           />
         </TouchableOpacity>
       )}
-
     </View>
-  )
-}
+  );
+};
 
-export default VideoCard
+export default VideoCard;
